@@ -8,3 +8,8 @@ Newt-Scamander-SRE Infra repository
 ``` sh 
 ssh -vT git@github.com
 ```
+
+2. add tag to remote repositor:
+```
+git tag -a HW_XX_
+```
