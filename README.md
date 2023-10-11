@@ -1,6 +1,12 @@
 # Newt-Scamander-SRE_infra
 Newt-Scamander-SRE Infra repository
 
+# HW_02
+- Base pull request for creating infra and microservice repo
+
+# HW_03
+- pre-commit hooks configure
+
 ## Usefule notes:
 
 1. check ssh connection to github (should return 'exit status 1')
