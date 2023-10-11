@@ -5,7 +5,7 @@ Newt-Scamander-SRE Infra repository
 
 1. check ssh connection to github (should return 'exit status 1')
 
-``` sh 
+``` sh
 ssh -vT git@github.com
 ```
 
@@ -13,3 +13,5 @@ ssh -vT git@github.com
 ```
 git tag -a HW_XX_
 ```
+
+3. If you used mount dir with NTFS FS - you could have trouble with pre-commit
