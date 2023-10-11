@@ -1,0 +1,28 @@
+{
+    "builders": [
+        {
+            "type": "yandex",
+            "service_account_key_file": "{{user `env_yc_service_key_file`}}",
+            "folder_id": "{{user `env_yc_catalog_id`}}",
+            "source_image_id": "{{user `env_yc_env_source_image_id`}}",
+            "image_name": "reddit-full-{{timestamp}}",
+            "image_family": "{{user `enc_yc_image_family`}}",
+            "ssh_username": "{{user `env_ssh_username`}}",
+            "platform_id": "standard-v1",
+            "service_account_id": "{{user `env_yc_service_account_id`}}",
+            "instance_cores": "{{user `env_yc_instance_cores`}}",
+            "disk_type": "{{user `env_yc_disk_type`}}",
+            "disk_size_gb": "{{user `env_yc_disk_size_gb`}}",
+            "use_ipv4_nat": "true",
+            "skip_create_image": "{{user `env_yc_skip_create_image`}}"
+        }
+    ],
+    "provisioners": [
+        {
+            "type": "shell",
+            "script": "config-scripts/create-reddit-vm.sh",
+            "execute_command": "sudo {{.Path}}"
+        }
+
+    ]
+}

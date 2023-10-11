@@ -1,0 +1,14 @@
+{
+    "env_yc_catalog_id": "tra-la-la-tra-la-la",
+    "env_yc_service_key_file": "tra-la-la-tra-la-lajson",
+    "env_yc_service_account_id": "tra-la-la-tra-la-la",
+    "env_yc_env_source_image_id": "tra-la-la-tra-la-la",
+    "enc_yc_image_family": "reddit-full",
+    "env_yc_instance_cores": "4",
+    "env_yc_disk_type": "network-hdd",
+    "env_yc_disk_size_gb": "some-size",
+    "env_yc_zone": "ru-central1-a",
+    "env_yc_subnet_id": "tra-la-la-tra-la-la",
+    "env_yc_skip_create_image": "true",
+    "env_ssh_username": "some_ssh_user_name"
+}:
