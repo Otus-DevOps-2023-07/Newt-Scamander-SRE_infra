@@ -1,3 +1,18 @@
+terraform {
+  required_version = ">=1.4.0"
+
+  required_providers {
+    yandex = {
+      source  = "yandex-cloud/yandex"
+      version = "~> 0.95"
+    }
+
+    time = {
+      source  = "hashicorp/time"
+      version = "0.9.1"
+    }
+  }
+}
 ######
 resource "yandex_vpc_network" "aplications-network" {
   name = "aplications-network"

@@ -14,7 +14,6 @@
             "disk_type": "{{user `disk_type`}}",
             "disk_size_gb": "{{user `disk_size_gb`}}",
             "use_ipv4_nat": "true",
-            "skip_create_image": "{{user `skip_create_image`}}"
         }
     ],
     "provisioners": [

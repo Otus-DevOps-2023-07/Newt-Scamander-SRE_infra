@@ -9,7 +9,6 @@
     "disk_size_gb": "12",
     "zone": "some_-zone",
     "subnet_id": "some_",
-    "skip_create_image": "false",
     "env_ssh_username": "some_username",
     "old_variant_env_yc_env_source_image_id": "some_"
 }
