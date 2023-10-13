@@ -3,7 +3,7 @@ terraform {
 
   required_providers {
     yandex = {
-      source = "yandex-cloud/yandex"
+      source  = "yandex-cloud/yandex"
       version = "0.100.0"
     }
 
@@ -16,7 +16,7 @@ terraform {
 ######
 resource "yandex_compute_instance" "app" {
   #first symbol - a letter, letters,number and "-" only!
-  name   = "reddit-app-${formatdate("YYYY-MM-DD-HH-mm", timestamp())}"
+  name = "reddit-app-${formatdate("YYYY-MM-DD-HH-mm", timestamp())}"
 
   ######
   resources {
@@ -38,7 +38,7 @@ resource "yandex_compute_instance" "app" {
   }
 
   metadata = {
-    ssh-keys = "ubuntu:${file(var.public_key_path)}"
+    ssh-keys  = "ubuntu:${file(var.public_key_path)}"
     user-data = <<-EOF
                 #!/bin/bash
                 echo "DATABASE_URL=${var.DB_connection}:27017" >> /etc/environment
@@ -55,7 +55,7 @@ resource "yandex_compute_instance" "app" {
   }
 
   provisioner "file" {
-    source     = "${path.module}/files/puma.service"
+    source      = "${path.module}/files/puma.service"
     destination = "/tmp/puma.service"
   }
 

@@ -3,7 +3,7 @@ terraform {
 
   required_providers {
     yandex = {
-      source = "yandex-cloud/yandex"
+      source  = "yandex-cloud/yandex"
       version = "0.100.0"
     }
 
@@ -16,7 +16,7 @@ terraform {
 ######
 resource "yandex_compute_instance" "db" {
   #first symbol - a letter, letters,number and "-" only!
-  name   = "reddit-db-${formatdate("YYYY-MM-DD-HH-mm", timestamp())}"
+  name = "reddit-db-${formatdate("YYYY-MM-DD-HH-mm", timestamp())}"
 
   ######
   resources {
@@ -31,7 +31,7 @@ resource "yandex_compute_instance" "db" {
       image_id = var.db_disk_image
     }
   }
-#Disable external IP for VM with DB in prod!
+  #Disable external IP for VM with DB in prod!
   network_interface {
     subnet_id = var.subnet_id #use with variable
     nat       = true
