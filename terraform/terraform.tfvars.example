@@ -1,0 +1,8 @@
+ya-cloud_service-token   = "tra-la-la-tra-la-la"
+cloud_id                 = "tra-la-la-tra-la-la"
+folder_id                = "tra-la-la-tra-la-la"
+image_id                 = "tra-la-la-tra-la-la"
+subnet_id                = "tra-la-la-tra-la-la"
+public_key_path          = "~/.ssh/tra-la-la-tra-la-la.pub"
+service_account_key_file = "tra-la-la-tra-la-la.json"
+zone                     = "ru-central1-a"

@@ -1,0 +1,227 @@
+# yandex provider
+
+###
+Be attentive:
+add yandex mirror to ` ~/terraformrc` :
+
+```
+provider_installation {
+  network_mirror {
+    url = "https://terraform-mirror.yandexcloud.net/"
+    include = ["registry.terraform.io/*/*"]
+  }
+  direct {
+    exclude = ["registry.terraform.io/*/*"]
+  }
+}
+```
+When you use .lock.hcl - run it:
+
+```sh
+terraform providers lock -net-mirror=https://terraform-mirror.yandexcloud.net -platform=linux_amd64 -platform=darwin_arm64 yandex-cloud/yandex
+```
+### Link to mirror documentation (ya cloud - terraform):
+https://registry.tfpla.net/providers/yandex-cloud/yandex/latest/docs
+
+
+#### Terraform automatically loads a number of variable definitions files if named the following way:
+`Files named exactly terraform.tfvars or terraform.tfvars.json.`
+`Any files with names ending in .auto.tfvars or .auto.tfvars.json.`
+
+`The "count" object can only be used in "module", "resource", and "data" blocks, and only when the "count" argument is set.`
+## YC Resources
+
+<details>
+<summary>List of Resources</summary>
+
+```
+yandex_alb_backend_group
+yandex_alb_http_router
+yandex_alb_load_balancer
+yandex_alb_target_group
+yandex_alb_virtual_host
+yandex_api_gateway
+yandex_billing_cloud_binding
+yandex_cdn_origin_group
+yandex_cdn_resource
+yandex_cm_certificate
+yandex_compute_disk
+yandex_compute_disk_placement_group
+yandex_compute_filesystem
+yandex_compute_gpu_cluster
+yandex_compute_image
+yandex_compute_instance
+yandex_compute_instance_group
+yandex_compute_placement_group
+yandex_compute_snapshot
+yandex_compute_snapshot_schedule
+yandex_container_registry
+yandex_container_registry_iam_binding
+yandex_container_registry_ip_permission
+yandex_container_repository
+yandex_container_repository_iam_binding
+yandex_container_repository_lifecycle_policy
+yandex_dataproc_cluster
+yandex_datatransfer_endpoint
+yandex_datatransfer_transfer
+yandex_dns_recordset
+yandex_dns_zone
+yandex_function
+yandex_function_iam_binding
+yandex_function_scaling_policy
+yandex_function_trigger
+yandex_iam_service_account
+yandex_iam_service_account_api_key
+yandex_iam_service_account_iam_binding
+yandex_iam_service_account_iam_member
+yandex_iam_service_account_iam_policy
+yandex_iam_service_account_key
+yandex_iam_service_account_static_access_key
+yandex_iot_core_broker
+yandex_iot_core_device
+yandex_iot_core_registry
+yandex_kms_secret_ciphertext
+yandex_kms_symmetric_key
+yandex_kms_symmetric_key_iam_binding
+yandex_kubernetes_cluster
+yandex_kubernetes_node_group
+yandex_lb_network_load_balancer
+yandex_lb_target_group
+yandex_lockbox_secret
+yandex_lockbox_secret_version
+yandex_logging_group
+yandex_mdb_clickhouse_cluster
+yandex_mdb_elasticsearch_cluster
+yandex_mdb_greenplum_cluster
+yandex_mdb_kafka_cluster
+yandex_mdb_kafka_connect
+yandex_mdb_kafka_topic
+yandex_mdb_mongodb_cluster
+yandex_mdb_mysql_cluster
+yandex_mdb_mysql_database
+yandex_mdb_mysql_user
+yandex_mdb_postgresql_cluster
+yandex_mdb_postgresql_database
+yandex_mdb_postgresql_user
+yandex_mdb_redis_cluster
+yandex_mdb_sqlserver_cluster
+yandex_message_queue
+yandex_monitoring_dashboard
+yandex_organizationmanager_group
+yandex_organizationmanager_group_iam_member
+yandex_organizationmanager_group_membership
+yandex_organizationmanager_organization_iam_binding
+yandex_organizationmanager_organization_iam_member
+yandex_organizationmanager_saml_federation
+yandex_resourcemanager_cloud
+yandex_resourcemanager_cloud_iam_binding
+yandex_resourcemanager_cloud_iam_member
+yandex_resourcemanager_folder
+yandex_resourcemanager_folder_iam_binding
+yandex_resourcemanager_folder_iam_member
+yandex_resourcemanager_folder_iam_policy
+yandex_serverless_container
+yandex_serverless_container_iam_binding
+yandex_storage_bucket
+yandex_storage_object
+yandex_vpc_address
+yandex_vpc_default_security_group
+yandex_vpc_gateway
+yandex_vpc_network
+yandex_vpc_route_table
+yandex_vpc_security_group
+yandex_vpc_security_group_rule
+yandex_vpc_subnet
+yandex_ydb_database_dedicated
+yandex_ydb_database_iam_binding
+yandex_ydb_database_serverless
+yandex_ydb_topic
+```
+</details>
+
+
+
+
+## YC Data Sources
+<summary>List of Data Sources </summary>
+<details>
+
+```
+yandex_datasource_alb_backend_group
+yandex_datasource_alb_http_router
+yandex_datasource_alb_load_balancer
+yandex_datasource_alb_target_group
+yandex_datasource_alb_virtual_host
+yandex_datasource_api_gateway
+yandex_datasource_billing_cloud_binding
+yandex_datasource_cdn_origin_group
+yandex_datasource_cdn_resource
+yandex_datasource_client_config
+yandex_datasource_cm_certificate
+yandex_datasource_cm_certificate_content
+yandex_datasource_compute_disk
+yandex_datasource_compute_disk_placement_group
+yandex_datasource_compute_filesystem
+yandex_datasource_compute_gpu_cluster
+yandex_datasource_compute_image
+yandex_datasource_compute_instance
+yandex_datasource_compute_instance_group
+yandex_datasource_compute_placement_group
+yandex_datasource_compute_snapshot
+yandex_datasource_compute_snapshot_schedule
+yandex_datasource_container_registry
+yandex_datasource_container_registry_ip_permission
+yandex_datasource_container_repository
+yandex_datasource_container_repository_lifecycle_policy
+yandex_datasource_dataproc_cluster
+yandex_datasource_dns_zone
+yandex_datasource_function
+yandex_datasource_function_scaling_policy
+yandex_datasource_function_trigger
+yandex_datasource_iam_policy
+yandex_datasource_iam_role
+yandex_datasource_iam_service_account
+yandex_datasource_iam_user
+yandex_datasource_iot_core_broker
+yandex_datasource_iot_core_device
+yandex_datasource_iot_core_registry
+yandex_datasource_kubernetes_cluster
+yandex_datasource_kubernetes_node_group
+yandex_datasource_lb_network_load_balancer
+yandex_datasource_lb_target_group
+yandex_datasource_lockbox_secret
+yandex_datasource_lockbox_secret_version
+yandex_datasource_logging_group
+yandex_datasource_mdb_clickhouse_cluster
+yandex_datasource_mdb_elasticsearch_cluster
+yandex_datasource_mdb_greenplum_cluster
+yandex_datasource_mdb_kafka_cluster
+yandex_datasource_mdb_kafka_connector
+yandex_datasource_mdb_kafka_topic
+yandex_datasource_mdb_mongodb_cluster
+yandex_datasource_mdb_mysql_cluster
+yandex_datasource_mdb_mysql_user
+yandex_datasource_mdb_postgresql_cluster
+yandex_datasource_mdb_postgresql_database
+yandex_datasource_mdb_postgresql_user
+yandex_datasource_mdb_redis_cluster
+yandex_datasource_mdb_sqlserver_cluster
+yandex_datasource_message_queue
+yandex_datasource_monitoring_dashboard
+yandex_datasource_organizationmanager_group
+yandex_datasource_organizationmanager_saml_federation
+yandex_datasource_organizationmanager_saml_federation_user_account
+yandex_datasource_resourcemanager_cloud
+yandex_datasource_resourcemanager_folder
+yandex_datasource_serverless_container
+yandex_datasource_vpc_address
+yandex_datasource_vpc_gateway
+yandex_datasource_vpc_network
+yandex_datasource_vpc_route_table
+yandex_datasource_vpc_security_group
+yandex_datasource_vpc_security_group_rule
+yandex_datasource_vpc_subnet
+yandex_datasource_ydb_database_dedicated
+yandex_datasource_ydb_database_serverless# yandex provider
+```
+</details>

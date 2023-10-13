@@ -1,0 +1,9 @@
+packer/variables.json
+packer/notes.info
+packer/service-key-v2 backup.json
+*.tfstate
+*.tfstate.*.backup
+*.tfstate.backup
+*.tfvars
+.terraform/*
+Otus-cloud-terraform/.terraform.lock.hcl

@@ -1,0 +1,8 @@
+{
+   "id": "tra-la-la",
+   "service_account_id": "tra-la-la",
+   "created_at": "2023-05-08T18:32:29.518636954Z",
+   "key_algorithm": "RSA_2048",
+   "public_key": "-----BEGIN PUBLIC KEY-----\tra-la-la\n-----END PUBLIC KEY-----\n",
+   "private_key": "-----BEGIN PRIVATE KEY--tra-la-la--U\n-----END PRIVATE KEY-----\n"
+}
