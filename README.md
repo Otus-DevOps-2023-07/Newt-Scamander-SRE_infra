@@ -106,3 +106,15 @@ packer build -var-file=some-env-file.json some-target-file.json
 **road_move**
 - First step: Instance with app created
 - Second step: adding load balancer with increase count for instance
+
+
+# HW_07: terraform_2
+postmorten:
+разделение VM c серрвисом на два инстанса.
+Основная проблема - не запутаться в переменных.
+Два гвоздя - после разделения нужно:
+1) Указать приложению адрес db по сгенерированному ip
+2) открыть подключение к db со стороны приложения
+Внимательнее относиться к service.key провайдера (например, добавлять в gitignore фильтр по маске *.key)
+При утечке ключа - пересоздавать сервисный аккаунт и обвновлять к нему ключ.
+(На будующее реализовать выдачу ключа самим терраформом непосредственно под проект?)
