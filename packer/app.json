@@ -13,7 +13,7 @@
             "instance_cores": "{{user `instance_cores`}}",
             "disk_type": "{{user `disk_type`}}",
             "disk_size_gb": "{{user `disk_size_gb`}}",
-            "use_ipv4_nat": "true",
+            "use_ipv4_nat": "true"
         }
     ],
     "provisioners": [
