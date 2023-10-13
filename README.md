@@ -1,5 +1,11 @@
 # Newt-Scamander-SRE_infra
 Newt-Scamander-SRE Infra repository
+
+# HW_02
+- Base pull request for creating infra and microservice repo
+
+
+
 # HW_03 ((Lecture 5) Meeting with cloud infrastructure. Yandex Cloud)
 
 1. приватные ключи - в keepassxc, шарятся в хост только после разблокировки, при блокировке базы - удаляются из кеша  *See: **Usefull commands** *.
@@ -37,6 +43,21 @@ https://158.160.28.114.sslip.io/login
 bastion_IP = 158.160.28.114
 someinternalhost_IP = 10.129.0.32
 
+
+## Usefule notes:
+
+1. check ssh connection to github (should return 'exit status 1')
+
+``` sh
+ssh -vT git@github.com
+```
+
+2. add tag to remote repositor:
+```
+git tag -a HW_XX_
+```
+
+3. If you used mount dir with NTFS FS - you will have trouble with pre-commit
 
 ### Usefull commands:
 
