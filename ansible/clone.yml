@@ -1,0 +1,9 @@
+---
+- name: Clone git repo
+  hosts: app
+  tasks:
+    - name: Clone_repo_from_git_url
+      ansible.builtin.git:
+        repo: https://github.com/express42/reddit
+        dest: /home/ubuntu/reddit
+...
