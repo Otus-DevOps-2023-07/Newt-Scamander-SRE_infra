@@ -1,6 +1,6 @@
 ---
 - name: Clone git repo
-  hosts: app
+  hosts: reddit-app-2023-10-14-10-30
   tasks:
     - name: Clone_repo_from_git_url
       ansible.builtin.git:

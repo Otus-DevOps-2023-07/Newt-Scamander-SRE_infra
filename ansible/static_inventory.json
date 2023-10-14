@@ -1,0 +1,28 @@
+{
+    "all": {
+        "hosts": {
+            "reddit-db-2023-10-14-10-28": {
+                "ansible_host": "158.160.33.234"
+            },
+            "reddit-app-2023-10-14-10-30": {
+                "ansible_host": "62.84.124.125"
+            }
+        },
+        "children": {
+            "app": {
+                "hosts": {
+                    "reddit-app-2023-10-14-10-30": {
+                        "ansible_host": "62.84.124.125"
+                    }
+                }
+            },
+            "db": {
+                "hosts": {
+                    "reddit-db-2023-10-14-10-28": {
+                        "ansible_host": "158.160.33.234"
+                    }
+                }
+            }
+        }
+    }
+}
