@@ -1,14 +1,14 @@
 {
-    "env_yc_catalog_id": "tra-la-la",
-    "env_yc_service_key_file": "tra-la-la-tra-la-la-tra-la-la.tra-la-la",
-    "env_yc_service_account_id": "tra-la-la",
-    "env_yc_env_source_image_id": "tra-la-la",
-    "env_yc_instance_cores": "tra-la-la",
-    "env_yc_disk_type": "tra-la-la-tra-la-la",
-    "env_yc_disk_size_gb": "tra-la-la",
-    "env_yc_zone": "ru-tra-la-la-a",
-    "env_yc_subnet_id": "tra-la-la",
-    "env_yc_skip_create_image": "tra-la-la",
-    "env_ssh_username": "tra-la-la"
-
+    "catalog_id": "some_catalog_id",
+    "service_key_file": "some_service.json",
+    "service_account_id": "some_service_account_id",
+    "env_source_image_id": "some_env_source_image_id",
+    "image_family": "some_image_family",
+    "instance_cores": "4",
+    "disk_type": "network-hdd",
+    "disk_size_gb": "12",
+    "zone": "some_-zone",
+    "subnet_id": "some_",
+    "env_ssh_username": "some_username",
+    "old_variant_env_yc_env_source_image_id": "some_"
 }
