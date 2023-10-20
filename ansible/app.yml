@@ -1,0 +1,100 @@
+---
+- name: Configure host and deploy app # some comments for name
+  hosts: app # hosts
+  vars:
+    mongo_bind_ip: 0.0.0.0 # Set variable
+    jsondata: "{{ lookup('file', './static_inventory.json') | from_json}}"
+
+
+##### Tasks:
+  tasks:
+    # - name: Get_vars_from_static_inv_output.json
+    #   include_vars:
+    #     file: ./static_inventory.json
+
+###### initial tasks
+
+    - name: Set db_host&web_name&web_ip
+      ansible.builtin.set_fact:
+        db_host: "{{ (hostvars | dict2items | selectattr('key', 'match', '^reddit-db.*') | list | first).value.internal_ip }}"
+        web_name: "{{ (hostvars | dict2items | selectattr('key', 'match', '^reddit-app.*') | list | first).key }}"
+        web_ip: "{{ (hostvars | dict2items | selectattr('key', 'match', '^reddit-app.*') | list | first).value.ansible_host }}"
+
+# - name: Set_vars_from_file
+#   ansible.builtin.set_fact:
+#     web_ip: "{{ hostvars[hosts['app'].hosts[0]] }}"
+#     db_ip: "{{ hostvars[hosts['db'].hosts[0]] }}"
+#     # web_ip: "{{ hostvars[groups['app'][0]].ansible_host }}"
+#     # db_ip: "{{ hostvars[groups['db'][0]].ansible_host }}"
+
+###### Debug task
+    - name: Print web_ip and web_ip
+      debug:
+        var: web_name,web_ip,db_host
+
+    - name: Add_unitd_file_for_Puma
+      become: true
+      ansible.builtin.copy:
+        src: ./files/puma.service
+        dest: /etc/systemd/system/puma.service
+        mode: "0644"
+      when: inventory_hostname == web_name
+
+      notify: Reload_puma_service
+
+    - name: Add_config_DB_connection
+      ansible.builtin.template:
+        src: templates/db_config.j2
+        dest: /home/ubuntu/db_config
+      when: inventory_hostname == web_name
+
+    - name: Enabled_puma
+      become: true
+      ansible.builtin.systemd:
+        name: puma
+        enabled: true
+        daemon_reload: true
+      when: inventory_hostname == web_name
+
+    - name: Git_install
+      become: true
+      ansible.builtin.apt:
+        name: git
+        state: present
+      when: inventory_hostname == web_name
+    - name: Set_permission
+      become: true
+      ansible.builtin.file:
+        path: "{{ item }}"
+        owner: ubuntu
+        group: ubuntu
+        mode: "0755"
+        recurse: true
+      loop:
+        - /home/ubuntu/reddit/
+      when: inventory_hostname == web_name
+
+
+    - name: Get_the_code
+      ansible.builtin.git:
+        repo: 'https://github.com/express42/reddit.git'
+        dest: /home/ubuntu/reddit
+        force: true
+        version: monolith # set the useful branch
+      when: inventory_hostname == web_name
+      notify: Reload_puma_service
+
+    - name: Bundle_install
+      community.general.bundler:
+        state: present
+        chdir: /home/ubuntu/reddit
+      when: inventory_hostname == web_name
+
+##### Handlers:
+
+  handlers:
+    - name: Reload_puma_service
+      become: true
+      ansible.builtin.service:
+        name: puma
+        state: restarted

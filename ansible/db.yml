@@ -1,0 +1,51 @@
+---
+- name: Configure host and deploy app # some comments for name
+  hosts: db # hosts
+  vars:
+    mongo_bind_ip: 0.0.0.0 # Set variable
+    jsondata: "{{ lookup('file', './static_inventory.json') | from_json}}"
+
+
+##### Tasks:
+  tasks:
+    # - name: Get_vars_from_static_inv_output.json
+    #   include_vars:
+    #     file: ./static_inventory.json
+
+    # - name: Set_vars_from_file
+    #   set_fact:
+    #     web_ip: "{{ hostvars[hosts['app'].hosts[0]] }}"
+    #     db_ip: "{{ hostvars[hosts['db'].hosts[0]] }}"
+    #     # web_ip: "{{ hostvars[groups['app'][0]].ansible_host }}"
+    #     # db_ip: "{{ hostvars[groups['db'][0]].ansible_host }}"
+
+
+###### initial tasks
+    - name: Set DB server name and IP variables
+      ansible.builtin.set_fact:
+        db_name: "{{ (hostvars | dict2items | selectattr('key', 'match', '^reddit-db.*') | list | first).key }}"
+        db_ip: "{{ (hostvars | dict2items | selectattr('key', 'match', '^reddit-db.*') | list | first).value.ansible_host }}"
+
+
+###### Debug task
+    - name: Print web_ip and web_ip
+      debug:
+        var: db_name,db_ip
+
+    - name: Change_mongo_configuration
+      become: true
+      ansible.builtin.template:
+        src: ./templates/mongod.conf.j2 # jinja file template
+        dest: /etc/mongod.conf
+        mode: "0644" # -rw-r--r-- mode for files, should be in ""
+      when: inventory_hostname == db_name
+      notify: Restart_mongod_service
+
+##### Handlers:
+
+  handlers:
+    - name: Restart_mongod_service
+      become: true
+      ansible.builtin.service:
+        name: mongod
+        state: restarted

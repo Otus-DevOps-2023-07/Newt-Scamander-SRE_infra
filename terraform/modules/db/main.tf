@@ -51,8 +51,10 @@ resource "yandex_compute_instance" "db" {
   }
 
   ########
-  provisioner "remote-exec" {
-    script = "${path.module}/files/db_deploy.sh"
-  }
+
+  ## temporary disabled for HW Ansible_2
+  # provisioner "remote-exec" {
+  #   script = "${path.module}/files/db_deploy.sh"
+  # }
 
 }

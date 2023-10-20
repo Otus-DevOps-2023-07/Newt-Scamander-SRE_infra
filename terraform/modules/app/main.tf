@@ -54,13 +54,15 @@ resource "yandex_compute_instance" "app" {
     #private_key = file("~/.ssh/ya-cloud-otus-key") #used usually
   }
 
-  provisioner "file" {
-    source      = "${path.module}/files/puma.service"
-    destination = "/tmp/puma.service"
-  }
+  ## temporary disabled for HW Ansible_2
 
-  provisioner "remote-exec" {
-    script = "${path.module}/files/deploy.sh"
-  }
+  # provisioner "file" {
+  #   source      = "${path.module}/files/puma.service"
+  #   destination = "/tmp/puma.service"
+  # }
+
+  # provisioner "remote-exec" {
+  #   script = "${path.module}/files/deploy.sh"
+  # }
 
 }

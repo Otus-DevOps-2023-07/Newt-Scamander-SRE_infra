@@ -1,18 +1,18 @@
 {
     "_meta": {
         "hostvars": {
-            "reddit-db-2023-10-14-10-28": {
-                "ansible_host": "158.160.33.234"
+            "reddit-db-2023-10-19-10-09": {
+                "ansible_host": "158.160.125.79"
             },
-            "reddit-app-2023-10-14-10-30": {
-                "ansible_host": "62.84.124.125"
+            "reddit-app-2023-10-19-10-10": {
+                "ansible_host": "84.252.130.232"
             }
         }
     },
     "all": {
         "hosts": [
-            "reddit-db-2023-10-14-10-28",
-            "reddit-app-2023-10-14-10-30"
+            "reddit-db-2023-10-19-10-09",
+            "reddit-app-2023-10-19-10-10"
         ],
         "vars": {
             "ansible_connection": "ssh",

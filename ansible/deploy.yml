@@ -1,0 +1,35 @@
+---
+- name: Deploy
+  hosts: app # hosts
+
+##### Tasks:
+  tasks:
+    - name: Git_install
+      become: true
+      ansible.builtin.apt:
+        name: git
+        state: present
+      when: inventory_hostname == web_name
+
+    - name: Get_the_code
+      ansible.builtin.git:
+        repo: 'https://github.com/express42/reddit.git'
+        dest: /home/ubuntu/reddit
+        force: true
+        version: monolith # set the useful branch
+      when: inventory_hostname == web_name
+      notify: Reload_puma_service
+
+    - name: Bundle_install
+      community.general.bundler:
+        state: present
+        chdir: /home/ubuntu/reddit
+      when: inventory_hostname == web_name
+      tags: deploy-tag
+
+  handlers:
+    - name: Reload_puma_service
+      become: true
+      ansible.builtin.service:
+        name: puma
+        state: restarted
