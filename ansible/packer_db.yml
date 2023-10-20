@@ -21,20 +21,10 @@
 
 
 ###### initial tasks
-    - name: Set DB server name variables
+    - name: Set app server name |  DB server name | web_ip | db_ip variables
       set_fact:
-        db_name: "{{ item.key }}"
-      with_dict: "{{ jsondata.all.hosts }}"
-      when: "'db' in item.key"
-      delegate_to: 127.0.0.1
-
-    - name: Set db_ip variables
-      set_fact:
-        db_ip: "{{ item.value.ansible_host }}"
-      with_dict: "{{ jsondata.all.hosts }}"
-      when: "'db' in item.key"
-      no_log: true
-      delegate_to: 127.0.0.1
+        db_name: "{{ (hostvars | dict2items | selectattr('key', 'match', '^reddit-db.*') | list | first).key }}"
+        db_ip: "{{ (hostvars | dict2items | selectattr('key', 'match', '^reddit-db.*') | list | first).value.ansible_host }}"
 
 # also work
 # web_ip: "{{ (jsondata.all.hosts | dict2items | selectattr('key', 'match', '.*app.*') | list | first).value.ansible_host }}"
