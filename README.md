@@ -3,6 +3,7 @@ Newt-Scamander-SRE Infra repository
 (данные неточные, нужно заполнить акуратнее)
 | Homework №| Additional task  | Usefull tips |
 | --------- | --------------- | --------------|
+|- [HW-10](#hw_09-ansible-3) |[?] Additional task done | [tips]()|
 |- [HW-09](#hw_09-ansible-2) |[x] Additional task done | [tips]()|
 |- [HW-08](#hw_08-ansible_01) | [ ] Additional task done| |
 |- [HW-07](#hw_07-terraform_2) | [ ] Additional task done| |
@@ -10,6 +11,23 @@ Newt-Scamander-SRE Infra repository
 |- [HW-05](#hw_05-using-packer-to-create-golden-image-lecture-7) | [x] Additional task done| [tips](#usefull-commands-hw_05)|
 |- [HW-04](#hw_04-deploy-test-cloud-application-lecture-6) | [ ] Additional task done|[tips](#usefull-commands-hw_04) |
 |- [HW-03](#hw_03-lecture-5-meeting-with-cloud-infrastructure-yandex-cloud) |[ ] Additional task done |[tips](#usefull-commands-hw_03) |
+
+### HW_10: Ansible-3
+- настроены переменные окружения
+- добавлена роль jdauphant.nginx, редирект с 80 порта - работает. В terraform ничего дополнительно открывать не нужно было, потому что
+yandex vpc default security_group - не настроена, всё пропускается. По идее добавляется через ingress:
+```
+  ingress {
+      description = "HTTP"
+      protocol = "TCP"
+      port = 80
+      v4_cidr_blocks = ["0.0.0.0/0"]
+  }
+```
+- системные пользователи созданы, по умолчанию вход по паролю для YC тоже отключен. Для проверки требуется включить в настройках sshd параметр и перезапустить службу (и вернуть всё обратно после проверки)
+- ansible vault использован. **Отличный совет по хранению key в ~/.ansible/vault.key**
+- динамическая инвенторизация используется за счёт двух yc_inventory.py в environments в каждом из которых указана своя среда.
+- дополнительно добавлена таска по внесению в описание web_app сервера ссылки в формате "http://{IP}:9292, где IP - внешний адрес сайта.
 
 ### HW_09: Ansible-2
 <details>
