@@ -1,0 +1,49 @@
+---
+- name: Deploy_app
+  hosts: app # hosts
+
+##### Tasks:
+  tasks:
+    - name: Get web_name&web_name&web_ip
+      ansible.builtin.set_fact:
+        web_ip: "{{ (hostvars | dict2items | selectattr('key', 'match', '^reddit-app.*') | list | first).value.ansible_host }}"
+        web_name: "{{ (hostvars | dict2items | selectattr('key', 'match', '^reddit-app.*') | list | first).key }}"
+
+    - name: Change description of VM
+      ansible.builtin.shell: yc compute instance update {{ web_name }} --description="http://{{ web_ip }}:9292"
+      register: result
+      delegate_to: localhost
+
+    # - name: Display the description
+    #   debug:
+    #     var: result
+
+  #   - name: Git_install
+  #     become: true
+  #     ansible.builtin.apt:
+  #       name: git
+  #       state: present
+  #     when: inventory_hostname == web_name
+
+  #   - name: Get_the_code
+  #     ansible.builtin.git:
+  #       repo: 'https://github.com/express42/reddit.git'
+  #       dest: /home/ubuntu/reddit
+  #       force: true
+  #       version: monolith # set the useful branch
+  #     when: inventory_hostname == web_name
+  #     notify: Reload_puma_service
+
+  #   - name: Bundle_install
+  #     community.general.bundler:
+  #       state: present
+  #       chdir: /home/ubuntu/reddit
+  #     when: inventory_hostname == web_name
+  #     tags: deploy-tag
+
+  # handlers:
+  #   - name: Reload_puma_service
+  #     become: true
+  #     ansible.builtin.service:
+  #       name: puma
+  #       state: restarted

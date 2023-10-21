@@ -3,14 +3,9 @@
   hosts: db # hosts
   vars:
     mongo_bind_ip: 0.0.0.0 # Set variable
-    jsondata: "{{ lookup('file', './static_inventory.json') | from_json}}"
-
 
 ##### Tasks:
   tasks:
-    # - name: Get_vars_from_static_inv_output.json
-    #   include_vars:
-    #     file: ./static_inventory.json
 
     # - name: Set_vars_from_file
     #   set_fact:
@@ -25,10 +20,6 @@
       set_fact:
         db_name: "{{ (hostvars | dict2items | selectattr('key', 'match', '^reddit-db.*') | list | first).key }}"
         db_ip: "{{ (hostvars | dict2items | selectattr('key', 'match', '^reddit-db.*') | list | first).value.ansible_host }}"
-
-# also work
-# web_ip: "{{ (jsondata.all.hosts | dict2items | selectattr('key', 'match', '.*app.*') | list | first).value.ansible_host }}"
-# db_ip: "{{ (jsondata.all.hosts | dict2items | selectattr('key', 'match', '.*db.*') | list | first).value.ansible_host }}"
 
 ###### Debug task
     # - name: Print web_ip and db_ip
@@ -56,7 +47,7 @@
     - name: Change_mongo_configuration
       become: true
       ansible.builtin.template:
-        src: ./templates/mongod.conf.j2 # jinja file template
+        src: ../templates/mongod.conf.j2 # jinja file template
         dest: /etc/mongod.conf
         mode: "0644" # -rw-r--r-- mode for files, should be in ""
       when: inventory_hostname == db_name
