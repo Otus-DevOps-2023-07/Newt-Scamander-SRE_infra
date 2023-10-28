@@ -1,0 +1,71 @@
+---
+# GET dinamyc env from hostvars
+- name: Set db_host&web_name&web_ip
+  ansible.builtin.set_fact:
+    db_host: "{{ (hostvars | dict2items | selectattr('key', 'match', '^reddit-db.*') | list | first).value.internal_ip }}"
+    web_name: "{{ (hostvars | dict2items | selectattr('key', 'match', '^reddit-app.*') | list | first).key }}"
+    web_ip: "{{ (hostvars | dict2items | selectattr('key', 'match', '^reddit-app.*') | list | first).value.ansible_host }}"
+    server_name: "{{ (hostvars | dict2items | selectattr('key', 'match', '^reddit-app.*') | list | first).key }}"
+
+###### Debug task (can be commented)
+
+- name: Print web_ip and web_ip
+  debug:
+    var: web_name,server_name,web_ip,db_host,nginx_sites
+
+- name: Print local env
+  debug:
+    msg:
+     - "local env: {{ env }}"
+
+# tasks file for app
+- name: Add_unitd_file_for_Puma
+  ansible.builtin.copy:
+    src: puma.service
+    dest: /etc/systemd/system/puma.service
+    mode: "0644"
+    owner: ubuntu
+    group: ubuntu
+
+
+- name: Add_config_DB_connection
+  ansible.builtin.template:
+    src: ../templates/db_config.j2
+    dest: /home/ubuntu/db_config
+    owner: ubuntu
+    group: ubuntu
+
+- name: Enabled_puma
+  systemd:
+    name: puma
+    enabled: true
+    daemon_reload: true
+
+- name: Git_install
+  ansible.builtin.apt:
+    name: git
+    state: present
+
+- name: Set_permission
+  ansible.builtin.file:
+    path: "{{ item }}"
+    owner: ubuntu
+    group: ubuntu
+    mode: "0755"
+    recurse: true
+  loop:
+    - /home/ubuntu/reddit/
+
+- name: Get_the_code
+  ansible.builtin.git:
+    repo: 'https://github.com/express42/reddit.git'
+    dest: /home/ubuntu/reddit
+    force: true
+    version: monolith # set the useful branch
+  notify: Reload_puma_service
+
+
+- name: Bundle_install
+  community.general.bundler:
+    state: present
+    chdir: /home/ubuntu/reddit

@@ -1,0 +1,32 @@
+{
+    "all": {
+        "hosts": {
+            "reddit-db-2023-10-21-05-57": {
+                "ansible_host": "158.160.49.77",
+                "internal_ip": "10.128.0.13"
+            },
+            "reddit-app-2023-10-21-05-58": {
+                "ansible_host": "158.160.33.242",
+                "internal_ip": "10.128.0.12"
+            }
+        },
+        "children": {
+            "app": {
+                "hosts": {
+                    "reddit-app-2023-10-21-05-58": {
+                        "ansible_host": "158.160.33.242",
+                        "internal_ip": "10.128.0.12"
+                    }
+                }
+            },
+            "db": {
+                "hosts": {
+                    "reddit-db-2023-10-21-05-57": {
+                        "ansible_host": "158.160.49.77",
+                        "internal_ip": "10.128.0.13"
+                    }
+                }
+            }
+        }
+    }
+}

@@ -3,14 +3,10 @@
   hosts: app # hosts
   vars:
     mongo_bind_ip: 0.0.0.0 # Set variable
-    jsondata: "{{ lookup('file', './static_inventory.json') | from_json}}"
 
 
 ##### Tasks:
   tasks:
-    # - name: Get_vars_from_static_inv_output.json
-    #   include_vars:
-    #     file: ./static_inventory.json
     - name: Set db_host
       ansible.builtin.set_fact:
         db_host: "{{ (hostvars | dict2items | selectattr('key', 'match', '^reddit-db.*') | list | first).value.internal_ip }}"
@@ -29,10 +25,6 @@
         web_name: "{{ (hostvars | dict2items | selectattr('key', 'match', '^reddit-app.*') | list | first).key }}"
         web_ip: "{{ (hostvars | dict2items | selectattr('key', 'match', '^reddit-app.*') | list | first).value.ansible_host }}"
 
-# also work
-# web_ip: "{{ (jsondata.all.hosts | dict2items | selectattr('key', 'match', '.*app.*') | list | first).value.ansible_host }}"
-# db_ip: "{{ (jsondata.all.hosts | dict2items | selectattr('key', 'match', '.*db.*') | list | first).value.ansible_host }}"
-
 ###### Debug task
     # - name: Print web_ip and db_ip
     #   ansible.builtin.debug:
@@ -42,7 +34,7 @@
     - name: Add_unitd_file_for_Puma
       become: true
       ansible.builtin.copy:
-        src: ./files/puma.service
+        src: ../files/puma.service
         dest: /etc/systemd/system/puma.service
         mode: "0644"
       when: inventory_hostname == web_name
@@ -51,7 +43,7 @@
 
     - name: Add_config_DB_connection
       ansible.builtin.template:
-        src: templates/db_config.j2
+        src: ../templates/db_config.j2
         dest: /home/ubuntu/db_config
       when: inventory_hostname == web_name
 

@@ -17,6 +17,7 @@ terraform {
 resource "yandex_compute_instance" "app" {
   #first symbol - a letter, letters,number and "-" only!
   name = "reddit-app-${formatdate("YYYY-MM-DD-HH-mm", timestamp())}"
+  description = "http://web_app_IP:port"
 
   ######
   resources {
