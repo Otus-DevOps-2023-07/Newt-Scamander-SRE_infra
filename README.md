@@ -10,6 +10,7 @@ Newt-Scamander-SRE Infra repository
 |- [HW-05](#hw_05-using-packer-to-create-golden-image-lecture-7) | [x] Additional task done| [tips](#usefull-commands-hw_05)|
 |- [HW-04](#hw_04-deploy-test-cloud-application-lecture-6) | [ ] Additional task done|[tips](#usefull-commands-hw_04) |
 |- [HW-03](#hw_03-lecture-5-meeting-with-cloud-infrastructure-yandex-cloud) |[ ] Additional task done |[tips](#usefull-commands-hw_03) |
+|- [HW-02](#hw_02) || |
 
 ### HW_09: Ansible-2
 <details>
@@ -43,7 +44,7 @@ ansible all -m ping
 ----
 
 ### HW_07: terraform_2
-postmorten:
+Postmortem:
 разделение VM c сервисом на два инстанса.
 Основная проблема - не запутаться в переменных.
 Два гвоздя - после разделения нужно:
@@ -168,5 +169,9 @@ ssh:
 ssh-add -L
 # show added ssh-key in cache
 ```
+##### [Content](#newt-scamander-sre_infra)
+----
+### HW_02
+- Base pull request for creating infra and microservice repo
 ##### [Content](#newt-scamander-sre_infra)
 ----
