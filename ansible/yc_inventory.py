@@ -37,6 +37,7 @@ static_inventory = {
 for instance in instances:
     instance_name = instance["name"]
     external_ip = instance["network_interfaces"][0]["primary_v4_address"]["one_to_one_nat"]["address"]
+    internal_ip = instance["network_interfaces"][0]["primary_v4_address"]["address"]
 
     dynamic_inventory["_meta"]["hostvars"][instance_name] = {
         "ansible_host": external_ip
@@ -46,19 +47,22 @@ for instance in instances:
 
     # Add host to the static inventory
     static_inventory["all"]["hosts"][instance_name] = {
-        "ansible_host": external_ip
+        "ansible_host": external_ip,
+        "internal_ip": internal_ip
         # Add any additional static variables here
     }
 
     # Organize hosts into children groups
     if "app" in instance_name:
         static_inventory["all"]["children"]["app"]["hosts"][instance_name] = {
-            "ansible_host": external_ip
+            "ansible_host": external_ip,
+            "internal_ip": internal_ip
             # Add any additional static variables for the "app" group here
         }
     elif "db" in instance_name:
         static_inventory["all"]["children"]["db"]["hosts"][instance_name] = {
-            "ansible_host": external_ip
+            "ansible_host": external_ip,
+            "internal_ip": internal_ip
             # Add any additional static variables for the "db" group here
         }
 

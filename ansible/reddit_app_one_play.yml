@@ -1,0 +1,130 @@
+---
+- name: Configure host and deploy app # some comments for name
+  hosts: all # hosts
+  vars:
+    mongo_bind_ip: 0.0.0.0 # Set variable
+#    db_host: 10.128.0.13 # Set manual yet!
+    jsondata: "{{ lookup('file', './static_inventory.json') | from_json}}"
+
+
+##### Tasks:
+  tasks:
+    # - name: Get_vars_from_static_inv_output.json
+    #   include_vars:
+    #     file: ./static_inventory.json
+
+    # - name: Set_vars_from_file
+    #   set_fact:
+    #     web_ip: "{{ hostvars[hosts['app'].hosts[0]] }}"
+    #     db_ip: "{{ hostvars[hosts['db'].hosts[0]] }}"
+    #     # web_ip: "{{ hostvars[groups['app'][0]].ansible_host }}"
+    #     # db_ip: "{{ hostvars[groups['db'][0]].ansible_host }}"
+
+
+###### initial tasks
+    - name: Set app server name |  DB server name | web_ip | db_ip variables
+      set_fact:
+        web_name: "{{ (hostvars | dict2items | selectattr('key', 'match', '^reddit-app.*') | list | first).key }}"
+        db_name: "{{ (hostvars | dict2items | selectattr('key', 'match', '^reddit-db.*') | list | first).key }}"
+        web_ip: "{{ (hostvars | dict2items | selectattr('key', 'match', '^reddit-app.*') | list | first).value.ansible_host }}"
+        db_ip: "{{ (hostvars | dict2items | selectattr('key', 'match', '^reddit-db.*') | list | first).value.ansible_host }}"
+        db_host: "{{ (hostvars | dict2items | selectattr('key', 'match', '^reddit-db.*') | list | first).value.internal_ip }}"
+
+# also work
+# web_ip: "{{ (jsondata.all.hosts | dict2items | selectattr('key', 'match', '.*app.*') | list | first).value.ansible_host }}"
+# db_ip: "{{ (jsondata.all.hosts | dict2items | selectattr('key', 'match', '.*db.*') | list | first).value.ansible_host }}"
+
+###### Debug task
+    - name: Print web_ip and db_ip
+      debug:
+        var: web_name,db_name,db_host
+
+
+    - name: Change_mongo_configuration
+      become: true
+      ansible.builtin.template:
+        src: ./templates/mongod.conf.j2 # jinja file template
+        dest: /etc/mongod.conf
+        mode: "0644" # -rw-r--r-- mode for files, should be in ""
+      tags: db-tag,reddit # some tags for task
+      when: inventory_hostname == db_name
+      notify: Restart_mongod_service
+
+    - name: Add_unitd_file_for_Puma
+      become: true
+      ansible.builtin.copy:
+        src: ./files/puma.service
+        dest: /etc/systemd/system/puma.service
+        mode: "0644"
+      tags: app-tag,puma,app
+      when: inventory_hostname == web_name
+
+      notify: Reload_puma_service
+
+    - name: Add_config_DB_connection
+      ansible.builtin.template:
+        src: templates/db_config.j2
+        dest: /home/ubuntu/db_config
+      when: inventory_hostname == web_name
+      tags: app-tag,app
+
+    - name: Enabled_puma
+      become: true
+      systemd:
+        name: puma
+        enabled: true
+        daemon_reload: true
+      when: inventory_hostname == web_name
+      tags: app-tag,puma
+
+    - name: Git_install
+      become: true
+      ansible.builtin.apt:
+        name: git
+        state: present
+      when: inventory_hostname == web_name
+
+    - name: Set_permission
+      become: true
+      ansible.builtin.file:
+        path: "{{ item }}"
+        owner: ubuntu
+        group: ubuntu
+        mode: "0755"
+        recurse: true
+      loop:
+        - /home/ubuntu/reddit/
+      when: inventory_hostname == web_name
+
+
+    - name: Get_the_code
+      ansible.builtin.git:
+        repo: 'https://github.com/express42/reddit.git'
+        dest: /home/ubuntu/reddit
+        force: true
+        version: monolith # set the useful branch
+      tags: deploy-tag
+      when: inventory_hostname == web_name
+      notify: Reload_puma_service
+
+    - name: Bundle_install
+      community.general.bundler:
+        state: present
+        chdir: /home/ubuntu/reddit
+      when: inventory_hostname == web_name
+      tags: deploy-tag
+
+##### Handlers:
+
+  handlers:
+    - name: Restart_mongod_service
+      become: true
+      ansible.builtin.service:
+        name: mongod
+        state: restarted
+
+    - name: Reload_puma_service
+      become: true
+      ansible.builtin.service:
+        name: puma
+        state: restarted

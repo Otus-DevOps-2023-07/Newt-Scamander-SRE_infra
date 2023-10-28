@@ -1,0 +1,78 @@
+---
+- name: MongoDB install and configure
+  hosts: db # hosts
+  vars:
+    mongo_bind_ip: 0.0.0.0 # Set variable
+    jsondata: "{{ lookup('file', './static_inventory.json') | from_json}}"
+
+
+##### Tasks:
+  tasks:
+    # - name: Get_vars_from_static_inv_output.json
+    #   include_vars:
+    #     file: ./static_inventory.json
+
+    # - name: Set_vars_from_file
+    #   set_fact:
+    #     web_ip: "{{ hostvars[hosts['app'].hosts[0]] }}"
+    #     db_ip: "{{ hostvars[hosts['db'].hosts[0]] }}"
+    #     # web_ip: "{{ hostvars[groups['app'][0]].ansible_host }}"
+    #     # db_ip: "{{ hostvars[groups['db'][0]].ansible_host }}"
+
+
+###### initial tasks
+    - name: Set app server name |  DB server name | web_ip | db_ip variables
+      set_fact:
+        db_name: "{{ (hostvars | dict2items | selectattr('key', 'match', '^reddit-db.*') | list | first).key }}"
+        db_ip: "{{ (hostvars | dict2items | selectattr('key', 'match', '^reddit-db.*') | list | first).value.ansible_host }}"
+
+# also work
+# web_ip: "{{ (jsondata.all.hosts | dict2items | selectattr('key', 'match', '.*app.*') | list | first).value.ansible_host }}"
+# db_ip: "{{ (jsondata.all.hosts | dict2items | selectattr('key', 'match', '.*db.*') | list | first).value.ansible_host }}"
+
+###### Debug task
+    # - name: Print web_ip and db_ip
+    #   debug:
+    #     var: web_name,db_name
+
+    - name: Add key for MongoDB
+      ansible.builtin.apt_key:
+        url: https://www.mongodb.org/static/pgp/server-4.2.asc
+        state: present
+
+    - name: Add repo for MongoDB
+      ansible.builtin.apt_repository:
+        repo: deb [ arch=amd64,arm64 ] https://repo.mongodb.org/apt/ubuntu xenial/mongodb-org/4.2 multiverse
+        state: present
+
+    - name: Install MongoDB
+      ansible.builtin.apt:
+        update_cache: true          # update-cache used as alias
+        name:
+          - mongodb-org
+        state: present
+      notify: Restart_MongoDB_Service
+
+    - name: Change_mongo_configuration
+      become: true
+      ansible.builtin.template:
+        src: ./templates/mongod.conf.j2 # jinja file template
+        dest: /etc/mongod.conf
+        mode: "0644" # -rw-r--r-- mode for files, should be in ""
+      when: inventory_hostname == db_name
+      notify: Restart_MongoDB_Service
+
+    - name: Enable mongod
+      ansible.builtin.systemd_service:
+        name: mongod
+        enabled: true
+        state: started
+
+##### Handlers:
+
+  handlers:
+    - name: Restart_MongoDB_Service
+      become: true
+      ansible.builtin.service:
+        name: mongod
+        state: restarted

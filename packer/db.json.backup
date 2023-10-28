@@ -18,8 +18,9 @@
     ],
     "provisioners": [
         {
-            "type": "ansible",
-            "playbook_file": "ansible/packer_db.yml"
+            "type": "shell",
+            "script": "config-scripts/create-db-vm.sh",
+            "execute_command": "sudo {{.Path}}"
         }
 
     ]

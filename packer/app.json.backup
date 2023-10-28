@@ -5,8 +5,8 @@
             "service_account_key_file": "{{user `service_key_file`}}",
             "folder_id": "{{user `catalog_id`}}",
             "source_image_id": "{{user `env_source_image_id`}}",
-            "image_name": "reddit-db-base",
-            "image_family": "{{user `image_family`}}",
+            "image_name": "reddit-app-base",
+            "image_family": "{{user `enc_yc_image_family`}}",
             "ssh_username": "{{user `env_ssh_username`}}",
             "platform_id": "standard-v1",
             "service_account_id": "{{user `service_account_id`}}",
@@ -18,8 +18,9 @@
     ],
     "provisioners": [
         {
-            "type": "ansible",
-            "playbook_file": "ansible/packer_db.yml"
+            "type": "shell",
+            "script": "config-scripts/create-app-vm.sh",
+            "execute_command": "sudo {{.Path}}"
         }
 
     ]
